@@ -1,0 +1,5 @@
+# Only needed to regenerate data/FACES.DAT and tests/fixtures/ef_reference.h
+# (make data). Install with: python3 -m pip install -r tools/requirements.txt
+numpy<2
+pillow
+scikit-learn

@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+# Atari binaries, disk images and data
+*.SYS binary
+*.DAT binary
+*.atr binary
+*.xex binary
+*.png binary

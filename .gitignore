@@ -1,0 +1,11 @@
+# All build output, including downloaded dependencies (make deps)
+/build/
+
+# Local Python environment for tools/export_faces.py
+/.env/
+__pycache__/
+
+# Editor and OS cruft
+*~
+*.swp
+.DS_Store
