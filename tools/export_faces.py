@@ -103,34 +103,55 @@ def unpack_dat(blob: bytes):
 
 
 def reference(train_px: np.ndarray, query_px: np.ndarray, k: int) -> dict:
-    """Float PCA on the same integer pixels the Atari sees (article method)."""
-    n = train_px.shape[0]
-    t = train_px.reshape(n, -1).astype(np.int64)
-    # Same rounding as ef_compute_mean(): (sum + n/2) / n.
-    mean = (t.sum(axis=0) + n // 2) // n
-    phi = t - mean
-    cov = phi @ phi.T
-    evals, evecs = np.linalg.eigh(cov.astype(np.float64))
-    order = np.argsort(evals)[::-1]
-    evals = evals[order]
-    evecs = evecs[:, order]
-    eig = phi.T.astype(np.float64) @ evecs[:, :k]
-    eig /= np.linalg.norm(eig, axis=0)
-    weights = phi @ eig
+    """Float PCA on the same integer pixels the Atari sees (article method).
+
+    This is the textbook version of what src/ef_model.c does in 16-bit
+    integers on the 6502 (see src/ef_model.h for an introduction). The C
+    unit tests check the Atari's results against these.
+    """
+    n_faces = train_px.shape[0]
+    # One row per face: 576 pixels each.
+    faces = train_px.reshape(n_faces, -1).astype(np.int64)
+    # The mean face, with the same rounding as ef_compute_mean():
+    # (sum + n/2) / n.
+    mean = (faces.sum(axis=0) + n_faces // 2) // n_faces
+    # Centered faces: what makes each face different from the average.
+    centered = faces - mean
+    # The small N x N matrix of dot products between centered faces
+    # (Turk and Pentland's "snapshot" trick) instead of the 576 x 576
+    # pixel covariance. Both have the same nonzero eigenvalues.
+    cov = centered @ centered.T
+    # eigh() is for symmetric matrices: it returns every eigenvalue and
+    # eigenvector at once (the Atari finds them one at a time by power
+    # iteration). They come smallest first, so reverse them.
+    eigenvalues, small_eigvecs = np.linalg.eigh(cov.astype(np.float64))
+    order = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[order]
+    small_eigvecs = small_eigvecs[:, order]
+    # Each eigenface is a blend of the centered faces, in the amounts its
+    # small eigenvector gives; then scaled to length 1. One per column.
+    eigenfaces = centered.T.astype(np.float64) @ small_eigvecs[:, :k]
+    eigenfaces /= np.linalg.norm(eigenfaces, axis=0)
+    # Weights: how far each face lies along each eigenface (dot product
+    # with the unit eigenface).
+    weights = centered @ eigenfaces
     rankings = []
     dists = []
-    for q in query_px.reshape(query_px.shape[0], -1).astype(np.int64):
-        qw = (q - mean) @ eig
-        d = np.linalg.norm(weights - qw, axis=1)
-        rankings.append([int(i) for i in np.argsort(d, kind="stable")])
-        dists.append(d)
+    for query in query_px.reshape(query_px.shape[0], -1).astype(np.int64):
+        query_weights = (query - mean) @ eigenfaces
+        # Euclidean distance in weight space to every training face.
+        distances = np.linalg.norm(weights - query_weights, axis=1)
+        rankings.append([int(i) for i in np.argsort(distances, kind="stable")])
+        dists.append(distances)
+    # The trace (sum of the diagonal) is the sum of all the eigenvalues:
+    # the total variation, so eigenvalue / trace is one axis's share.
     trace = float(np.trace(cov))
     return {
         "mean": mean.astype(np.int64),
         "cov": cov,
-        "eigenvalues": evals,
-        "variance_permille": [int(round(1000.0 * v / trace)) for v in evals[:k]],
-        "eigenfaces": eig.T,
+        "eigenvalues": eigenvalues,
+        "variance_permille": [int(round(1000.0 * v / trace)) for v in eigenvalues[:k]],
+        "eigenfaces": eigenfaces.T,
         "weights": weights,
         "rankings": rankings,
         "distances": dists,

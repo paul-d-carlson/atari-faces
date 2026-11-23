@@ -16,6 +16,11 @@ by Hassan Id Mansour, which in turn follows Turk & Pentland,
 for [cc65](https://cc65.github.io/); the only machine code is a 20-byte
 display-list interrupt.
 
+New to eigenfaces, eigenvectors or eigenvalues? The comment at the top of
+[src/ef_model.h](src/ef_model.h) explains them from scratch, and
+[src/ef_model.c](src/ef_model.c) shows how each step is computed in
+16-bit integers on the 6502.
+
 ## Running it
 
 ```

@@ -61,25 +61,25 @@ void scr_clear_text(void);
 /* Hue 0..15 for the picture (and the screen border). */
 void scr_hue(u8 hue);
 
-void scr_pixel(u8 x, u8 y, u8 lum);
-void scr_fill(u8 x, u8 y, u8 w, u8 h, u8 lum);
+void scr_pixel(u8 x, u8 y, u8 shade);
+void scr_fill(u8 x, u8 y, u8 width, u8 height, u8 shade);
 /* First `rows` rows of a 24x24 face (0..63) at even x. */
-void scr_face_rows(u8 x, u8 y, const u8 *px, u8 rows);
-void scr_face(u8 x, u8 y, const u8 *px);
+void scr_face_rows(u8 x, u8 y, const u8 *pixels, u8 rows);
+void scr_face(u8 x, u8 y, const u8 *pixels);
 /* A signed 24x24 image: 0 is mid-gray, and values are multiplied by
  * `contrast` (1, 2, ...) before -64..63 is mapped to black..white. */
-void scr_face_signed(u8 x, u8 y, const s8 *v, u8 contrast);
+void scr_face_signed(u8 x, u8 y, const s8 *values, u8 contrast);
 /* 8x8 thumbnail (3x3 averages) of a face in slot 0..9. */
-void scr_thumb(u8 slot, const u8 *px);
+void scr_thumb(u8 slot, const u8 *pixels);
 /* Marker under thumbnail slot, or clear it. */
 void scr_mark(u8 slot, u8 on);
 /* Bar of height 0..SCR_BAR_H under thumbnail slot. */
-void scr_bar(u8 slot, u8 height, u8 lum);
+void scr_bar(u8 slot, u8 height, u8 shade);
 
 /* Text line `line`, padded with spaces to 40 columns. */
-void scr_text(u8 line, const char *s);
-/* Write s at a column, OR-ing every character with `inverse`. */
-void scr_text_at(u8 line, u8 col, const char *s, u8 inverse);
+void scr_text(u8 line, const char *text);
+/* Write text at a column, OR-ing every character with `inverse`. */
+void scr_text_at(u8 line, u8 col, const char *text, u8 inverse);
 /* Progress bar of `width` cells at a column: done / total filled. */
 void scr_progress(u8 line, u8 col, u8 width, u16 done, u16 total);
 

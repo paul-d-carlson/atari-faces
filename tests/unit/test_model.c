@@ -7,6 +7,14 @@
  *   face0 = 32 + 20A, face1 = 32 - 20A, face2 = 32 + 8B, face3 = 32 - 8B
  * so the mean is exactly 32, the first principal axis is A (variance
  * 2*400 of 2*400 + 2*64, i.e. 862/1000) and the second is B (138/1000).
+ *
+ * Why: after subtracting the mean the faces are +20A, -20A, +8B and -8B.
+ * A and B are at right angles (their dot product is zero), so they are
+ * independent directions, and the faces spread 20 gray levels per pixel
+ * along A but only 8 along B. Variance goes with the square of the
+ * spread: 400 per pixel per face along A against 64 along B. So A is
+ * the eigenface with the largest eigenvalue and B the next; there is no
+ * third direction, so a third eigenvector would be all zeros.
  */
 #include <string.h>
 

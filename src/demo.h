@@ -68,8 +68,8 @@ demo_report *demo_report_block(void);
 u8 demo_load(void);
 void demo_title(void);
 void demo_train(void);
-/* Recognize query q. */
-void demo_match(u8 q);
+/* Recognize mystery face number `query` (0-based). */
+void demo_match(u8 query);
 /* Show an error on screen and record it in the report block. */
 void demo_fail(u8 error, u8 detail);
 /* Everything, forever. */

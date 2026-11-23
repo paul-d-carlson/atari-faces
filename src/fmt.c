@@ -3,6 +3,7 @@
  */
 #include "fmt.h"
 
+/* The line being built, always NUL-terminated. */
 static char g_buf[FMT_MAX + 1u];
 static u8 g_len;
 
@@ -27,21 +28,24 @@ void fmt_str(const char *s)
     }
 }
 
-static void fmt_num(u16 v, u8 width, char pad)
+/* value in decimal, padded on the left with `pad` to `width` columns.
+ * Digits come out lowest first, so they are collected and then written
+ * in reverse. */
+static void fmt_num(u16 value, u8 width, char pad)
 {
     char digits[5];
-    u8 n = 0;
+    u8 n_digits = 0;
 
     do {
-        digits[n++] = (char)('0' + v % 10u);
-        v /= 10u;
-    } while (v != 0u);
-    while (width > n) {
+        digits[n_digits++] = (char)('0' + value % 10u);
+        value /= 10u;
+    } while (value != 0u);
+    while (width > n_digits) {
         fmt_char(pad);
         --width;
     }
-    while (n != 0u) {
-        fmt_char(digits[--n]);
+    while (n_digits != 0u) {
+        fmt_char(digits[--n_digits]);
     }
 }
 
