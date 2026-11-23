@@ -111,7 +111,8 @@
  *
  *   centered pixel         |c| <= 63
  *   covariance entry       |C| <= 576 * 63 * 63      = 2,286,144   (s32),
- *                          kept only as C16 = C >> shift, |C16| <= 16383
+ *                          kept only as C16 = C >> shift (g_cov_scaled),
+ *                          |C16| <= 16383
  *   small eigenvector      |v| <= 255 (power iteration), a copy scaled
  *                          to |v| <= 63 builds the eigenfaces
  *   C16 * v                <= 10 * 16383 * 255       = 41.8M       (s32)

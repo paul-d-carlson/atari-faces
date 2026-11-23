@@ -1,6 +1,18 @@
 /*
- * demo.h -- the eigenfaces show: load, train step by step, then recognize
+ * demo.h -- the eigenfaces demo: load, train step by step, then recognize
  * each mystery face in turn, forever.
+ *
+ * Terms used in this demo:
+ *
+ *   training face  one of the ten photos the model learns from
+ *   query face     a photo kept out of training and used to test
+ *                  recognition; the screen calls it a "mystery face"
+ *   label          the Olivetti subject number: who is in the photo
+ *   step           one numbered screen of the demo ("STEP 4 OF 7")
+ *   stage          where ef_model.c has got to (EF_ST_*); each
+ *                  ef_*_step() call does one small piece of a stage
+ *   phase          a part of the math whose time is measured
+ *                  (DEMO_PH_* below)
  *
  * Progress and results are also written to a small report block in page
  * six ($0600), which the integration test reads out of emulated memory.

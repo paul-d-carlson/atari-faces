@@ -84,9 +84,9 @@ static void test_meta(void)
     g_info.n_query = 1;
     TF_EQ(efd_parse_meta(meta, &g_info), EFD_OK);
     TF_EQ(g_info.label[0], 7);
-    TF_EQ(g_info.shot[1], 2);
+    TF_EQ(g_info.photo[1], 2);
     TF_EQ(g_info.label[2], 26);
-    TF_EQ(g_info.shot[2], 9);
+    TF_EQ(g_info.photo[2], 9);
 }
 
 static void test_meta_bad_shot(void)

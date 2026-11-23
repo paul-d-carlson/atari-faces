@@ -1,5 +1,5 @@
 /*
- * test_demo.c -- the whole show on the host, with fake hardware: waits
+ * test_demo.c -- the whole demo on the host, with fake hardware: waits
  * finish at once, the screen is a byte array and FACES.DAT comes from
  * data/. (On the Atari the demo is covered by the integration test.)
  */

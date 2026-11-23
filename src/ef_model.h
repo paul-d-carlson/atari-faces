@@ -63,6 +63,10 @@
  *    the faces along it. The next eigenvector is the longest direction
  *    at right angles to the first, and so on.
  *
+ *    Three words for the same thing appear in this code: an
+ *    "eigenvector" of the covariance matrix, a "principal component",
+ *    and an "axis" (of variation). Variables use `comp` for its number.
+ *
  * 5. Eigenfaces.
  *
  *    Each eigenvector has 576 entries, one per pixel, so it can be drawn

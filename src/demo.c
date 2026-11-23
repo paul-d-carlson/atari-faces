@@ -1,7 +1,7 @@
 /*
  * demo.c -- see demo.h.
  *
- * The show walks through the eigenfaces method (introduced step by step
+ * The demo walks through the eigenfaces method (introduced step by step
  * in ef_model.h) one screen per step, calling into ef_model.c a little
  * at a time and drawing what each step produced:
  *
@@ -152,11 +152,11 @@ static void draw_thumbs(void)
 
 static void clear_marks(void)
 {
-    u8 slot;
+    u8 position;
 
-    for (slot = 0; slot < EF_MAX_FACES; ++slot) {
-        scr_mark(slot, 0);
-        scr_bar(slot, 0, 0);
+    for (position = 0; position < EF_MAX_FACES; ++position) {
+        scr_mark(position, 0);
+        scr_bar(position, 0, 0);
     }
 }
 
@@ -219,7 +219,7 @@ u8 demo_load(void)
     u8 header[EFD_HEADER_LEN];
     u8 face;
     u8 n_in_file;
-    u8 *slot;
+    u8 *face_pixels;
     int fd;
     u8 result = DEMO_OK;
 
@@ -258,21 +258,21 @@ u8 demo_load(void)
 
     n_in_file = (u8)(g_file.n_train + g_file.n_query);
     for (face = 0; face < n_in_file; ++face) {
-        slot = face < g_file.n_train ? ef_face_slot(face)
-                                     : g_query_faces[face - g_file.n_train];
-        if (disk_read(fd, slot, EF_PIXELS) != EF_PIXELS) {
+        face_pixels = face < g_file.n_train ? ef_face_slot(face)
+                                            : g_query_faces[face - g_file.n_train];
+        if (disk_read(fd, face_pixels, EF_PIXELS) != EF_PIXELS) {
             result = DEMO_ERR_READ;
             goto done;
         }
-        if (efd_check_face(slot) != EFD_OK) {
+        if (efd_check_face(face_pixels) != EFD_OK) {
             result = DEMO_ERR_FORMAT;
             goto done;
         }
         fmt_begin();
         if (face < g_file.n_train) {
             ef_set_label(face, g_file.label[face]);
-            scr_face(SCR_PANEL_A, 0, slot);
-            scr_thumb(face, slot);
+            scr_face(SCR_PANEL_A, 0, face_pixels);
+            scr_thumb(face, face_pixels);
             fmt_str("FACE ");
             fmt_u0((u16)(face + 1u), 2);
             fmt_char('/');
@@ -280,7 +280,7 @@ u8 demo_load(void)
             fmt_str("  ");
             fmt_subject(g_file.label[face]);
             fmt_str("  PHOTO ");
-            fmt_u(g_file.shot[face], 0);
+            fmt_u(g_file.photo[face], 0);
             snd_click();
         } else {
             fmt_str("MYSTERY FACE ");

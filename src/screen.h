@@ -69,12 +69,12 @@ void scr_face(u8 x, u8 y, const u8 *pixels);
 /* A signed 24x24 image: 0 is mid-gray, and values are multiplied by
  * `contrast` (1, 2, ...) before -64..63 is mapped to black..white. */
 void scr_face_signed(u8 x, u8 y, const s8 *values, u8 contrast);
-/* 8x8 thumbnail (3x3 averages) of a face in slot 0..9. */
-void scr_thumb(u8 slot, const u8 *pixels);
-/* Marker under thumbnail slot, or clear it. */
-void scr_mark(u8 slot, u8 on);
-/* Bar of height 0..SCR_BAR_H under thumbnail slot. */
-void scr_bar(u8 slot, u8 height, u8 shade);
+/* 8x8 thumbnail (3x3 averages) of a face at thumbnail position 0..9. */
+void scr_thumb(u8 position, const u8 *pixels);
+/* Marker under the thumbnail at `position`, or clear it. */
+void scr_mark(u8 position, u8 on);
+/* Bar of height 0..SCR_BAR_H under the thumbnail at `position`. */
+void scr_bar(u8 position, u8 height, u8 shade);
 
 /* Text line `line`, padded with spaces to 40 columns. */
 void scr_text(u8 line, const char *text);

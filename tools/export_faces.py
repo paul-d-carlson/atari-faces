@@ -22,8 +22,8 @@ FACES.DAT layout (all values unsigned bytes)
   4  n_query      query faces (<= 5)
   5  24 24        width, height
   7  64           gray levels per pixel
-  8  {label, shot} for every training face, then every query face
-     (label = Olivetti subject 0..39, shot = photo 0..9 of that subject)
+  8  {label, photo} for every training face, then every query face
+     (label = Olivetti subject 0..39, photo = photo number 0..9 of that subject)
   .. n_train * 576 pixel bytes, then n_query * 576, row-major, 0..63
 
 Requirements: numpy, pillow, scikit-learn (see tools/requirements.txt).
@@ -66,15 +66,15 @@ def shrink(img64: np.ndarray) -> np.ndarray:
 
 def pack_dat(train: Sequence[Tuple[int, int, np.ndarray]],
              query: Sequence[Tuple[int, int, np.ndarray]]) -> bytes:
-    """Serialize (label, shot, pixels) tuples into the FACES.DAT format."""
+    """Serialize (label, photo, pixels) tuples into the FACES.DAT format."""
     if not 1 <= len(train) <= MAX_TRAIN:
         raise ValueError(f"need 1..{MAX_TRAIN} training faces")
     if len(query) > MAX_QUERY:
         raise ValueError(f"at most {MAX_QUERY} query faces")
     out = bytearray(MAGIC)
     out += bytes([VERSION, len(train), len(query), W, H, LEVELS])
-    for label, shot, _ in list(train) + list(query):
-        out += bytes([label, shot])
+    for label, photo, _ in list(train) + list(query):
+        out += bytes([label, photo])
     for _, _, px in list(train) + list(query):
         flat = np.asarray(px, dtype=np.uint8).reshape(-1)
         if flat.size != PIXELS or int(flat.max()) >= LEVELS:
@@ -84,7 +84,7 @@ def pack_dat(train: Sequence[Tuple[int, int, np.ndarray]],
 
 
 def unpack_dat(blob: bytes):
-    """Inverse of pack_dat; returns (train, query) lists of (label, shot, px)."""
+    """Inverse of pack_dat; returns (train, query) lists of (label, photo, px)."""
     if blob[:2] != MAGIC or blob[2] != VERSION:
         raise ValueError("not a FACES.DAT v1 file")
     n_train, n_query, w, h, levels = blob[3:8]

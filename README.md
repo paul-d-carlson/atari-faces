@@ -48,7 +48,7 @@ regenerate the data (`make data`).
 | 1 | Loading the faces | ten 24 x 24 faces, 64 gray levels, from `D:FACES.DAT` |
 | 2 | The average face | mean of the training faces |
 | 3 | What makes a face unique | each face minus the mean |
-| 4 | How alike are the faces? | the 10 x 10 covariance matrix, entry by entry |
+| 4 | How alike are the faces? | the 10 x 10 matrix of dot products between centered faces (it stands in for the covariance; see below), entry by entry |
 | 5 | Main axes of variation | its top four eigenvectors, by power iteration |
 | 6 | Eigenfaces | those axes turned back into images |
 | 7 | Every face as four numbers | each face projected onto the eigenfaces |
@@ -90,7 +90,7 @@ make test              # everything below
 make test-host         # unit tests compiled natively, with sanitizers (< 1 s)
 make coverage          # the same with an llvm-cov source coverage report
 make test-target       # the same unit tests on the emulated 6502
-make test-integration  # boot build/faces.atr and check the whole show
+make test-integration  # boot build/faces.atr and check the whole demo
 make test-tools        # tests for tools/export_faces.py
 ```
 
@@ -118,7 +118,7 @@ every mystery face is recognized as the reference says; training takes
 under 60 s of math and a match under 3 s; the screen never stands still
 for more than 1.5 s; no sound-effect click turns into static (noise for
 more than 3 frames); and the C stack stays within bounds. It also saves a
-screenshot of every screen to `build/integration/shots/`.
+screenshot of every screen to `build/integration/screenshots/`.
 
 For performance work, both runners take `--profile FILE`, and
 [tools/profile.py](tools/profile.py) turns the result into cycles per
@@ -144,7 +144,7 @@ src/            the demo
   hw.h          Atari addresses (a fake 64K array in the host tests)
   screen.* sound.* sys.* disk.*   Atari display, POKEY, timing, files
   fmt.*         building lines of text without printf
-  demo.*        the show; main.c; atari.cfg (memory map)
+  demo.*        the demo; main.c; atari.cfg (memory map)
 tests/unit      unit tests, shared by host and 6502
 tests/host      host test main and fake hardware
 tests/target    6502 test images

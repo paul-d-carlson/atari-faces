@@ -37,7 +37,7 @@ u8 efd_parse_meta(const u8 *buf, efd_info *info)
             return EFD_BAD_META;
         }
         info->label[i] = buf[2u * i];
-        info->shot[i] = buf[2u * i + 1u];
+        info->photo[i] = buf[2u * i + 1u];
     }
     return EFD_OK;
 }

@@ -231,7 +231,7 @@ static void test_thumb(void)
     TF_EQ(*gfx(24, SCR_THUMB_Y + 1u), 0x22);
     TF_EQ(*gfx(22, SCR_THUMB_Y), 0);
     TF_EQ(*gfx(32, SCR_THUMB_Y), 0);
-    scr_thumb(10, g_px);                 /* no slot 10 */
+    scr_thumb(10, g_px);                 /* no thumbnail 10 */
     TF_EQ(*gfx(0, SCR_THUMB_Y + 8u), 0);
 }
 

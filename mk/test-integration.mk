@@ -1,4 +1,4 @@
-# mk/test-integration.mk -- boot the real demo disk and check the show.
+# mk/test-integration.mk -- boot the real demo disk and check the whole demo.
 #
 # tests/driver/demo_runner.c boots build/faces.atr (the exact disk users
 # get) on an emulated 48K Atari 800, taps START to skip the pauses, and
@@ -21,8 +21,8 @@ INT_COVER := $(foreach f,$(APP_SRCS),--cover $(f))
 .PHONY: test-integration screenshots
 
 test-integration: $(DEMO_RUNNER) $(DEMO_ATR) ## Boot the demo disk and check every match
-	$(Q)rm -rf $(INT_DIR)/shots && mkdir -p $(INT_DIR)/shots
-	$(Q)$(DEMO_RUNNER) $(DEMO_ATR) $(DEMO_DBG) --shots $(INT_DIR)/shots $(INT_COVER)
+	$(Q)rm -rf $(INT_DIR)/screenshots && mkdir -p $(INT_DIR)/screenshots
+	$(Q)$(DEMO_RUNNER) $(DEMO_ATR) $(DEMO_DBG) --screenshots $(INT_DIR)/screenshots $(INT_COVER)
 
 screenshots: test-integration ## Same, then list the PNG of every screen
-	@ls -1 $(INT_DIR)/shots
+	@ls -1 $(INT_DIR)/screenshots

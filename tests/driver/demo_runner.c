@@ -1,18 +1,18 @@
 /*
  * demo_runner.c -- integration test: boot the real demo disk (the exact
  * AUTORUN.SYS users get), let it train and recognize every mystery face,
- * then check what it reported in page six (src/demo.h) against the numpy
+ * then check what it reported in page six ($0600, see src/demo.h) against the numpy
  * reference and the speed budgets below (3 s per face, 60 s to train,
- * and the screen never frozen for more than 1.5 s). It also listens to
+ * and the screen never left unchanged for more than 1.5 s). It also listens to
  * the click voice: a click that is not faded out before the demo starts
  * a long computation goes on hissing until the next frame wait.
  *
- *   demo_runner DEMO.atr DEMO.dbg [--machine OPT] [--profile FILE] [--shots DIR]
+ *   demo_runner DEMO.atr DEMO.dbg [--machine OPT] [--profile FILE] [--screenshots DIR]
  *               [--realtime] [--cover src/x.c ...]
  *
  * START is tapped every few frames so the pauses meant for a human viewer
- * finish quickly; --realtime leaves START alone and plays the show at its
- * natural pace. --shots saves a PNG of the last frame of every screen
+ * finish quickly; --realtime leaves START alone and plays the demo at its
+ * natural pace. --screenshots saves a PNG of the last frame of every screen
  * (each time the top text line changes).
  */
 #include <stdio.h>
@@ -35,11 +35,11 @@
 #define STACK_LIMIT  (STACK_SIZE * 3u / 4u)
 
 /* Speed budgets, in frames (60 a second). The demo times only the
- * eigenfaces math (see src/demo.h); BUDGET_FROZEN covers everything
- * else, so the show itself never stalls. */
+ * eigenfaces math (see src/demo.h); BUDGET_UNCHANGED covers everything
+ * else, so the demo itself never stalls. */
 #define BUDGET_MATCH     (3 * 60)    /* recognizing one face */
 #define BUDGET_TRAINING  (60 * 60)   /* everything from mean to weights */
-#define BUDGET_FROZEN    90          /* longest time the screen may not change */
+#define BUDGET_UNCHANGED 90          /* longest time the screen may not change */
 
 /* snd_click() (src/sound.c) plays noise on voice 1 that fades out within
  * two frames. Anything longer is heard as static. */
@@ -51,7 +51,7 @@ static const char *const g_phase_names[DEMO_PHASES] = {
     "weights", "match",
 };
 
-/* A cheap fingerprint of the picture and text, to spot a frozen screen. */
+/* A cheap fingerprint of the picture and text, to spot a screen that is not changing. */
 static unsigned long screen_sum(void)
 {
     const unsigned char *m = emu_mem();
@@ -79,7 +79,7 @@ static void text_line(unsigned line, char *out)
     out[SCR_COLS] = '\0';
 }
 
-static void save_shot(const char *dir, int n, const char *title)
+static void save_screenshot(const char *dir, int n, const char *title)
 {
     char path[512];
     char name[48];
@@ -106,20 +106,20 @@ int main(int argc, char **argv)
 {
     const char *machine = "-atari";
     const char *profile = NULL;
-    const char *shots = NULL;
+    const char *screenshots = NULL;
     int realtime = 0;
     dbgcov_target_t cover[MAX_COVER];
     int ncover = 0;
     const demo_report *r;
     char line0[SCR_COLS + 1];
     char prev0[SCR_COLS + 1] = "";
-    int nshot = 0;
+    int n_screenshots = 0;
     int title_since = 0;
     unsigned long last_sum = 0;
     int last_change = 0;
-    int frozen = 0;
-    int frozen_at = 0;
-    char frozen_title[SCR_COLS + 1] = "";
+    int longest_unchanged = 0;
+    int unchanged_at = 0;
+    char unchanged_title[SCR_COLS + 1] = "";
     char change_title[SCR_COLS + 1] = "";
     char noise_title[SCR_COLS + 1] = "";
     int noise_run = 0;
@@ -133,8 +133,8 @@ int main(int argc, char **argv)
     int i;
 
     if (argc < 3) {
-        fprintf(stderr, "usage: %s DEMO.atr DEMO.dbg [--machine OPT] [--profile FILE] [--shots DIR] "
-                        "[--realtime] [--cover FILE...]\n", argv[0]);
+        fprintf(stderr, "usage: %s DEMO.atr DEMO.dbg [--machine OPT] [--profile FILE] "
+                        "[--screenshots DIR] [--realtime] [--cover FILE...]\n", argv[0]);
         return 2;
     }
     for (i = 3; i < argc; ++i) {
@@ -142,8 +142,8 @@ int main(int argc, char **argv)
             profile = argv[++i];
         } else if (strcmp(argv[i], "--machine") == 0 && i + 1 < argc) {
             machine = argv[++i];
-        } else if (strcmp(argv[i], "--shots") == 0 && i + 1 < argc) {
-            shots = argv[++i];
+        } else if (strcmp(argv[i], "--screenshots") == 0 && i + 1 < argc) {
+            screenshots = argv[++i];
         } else if (strcmp(argv[i], "--realtime") == 0) {
             realtime = 1;
         } else if (strcmp(argv[i], "--cover") == 0 && i + 1 < argc && ncover < MAX_COVER) {
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
          * at power-on means "boot from cassette". */
         if (!running) {
             running = emu_peek16(0x0230) == SCR_DL;
-            last_change = frame;    /* the freeze clock starts here */
+            last_change = frame;    /* the unchanged-screen clock starts here */
         }
         if (emu_frame(running && !realtime && frame % 8 < 2) != 0) {
             return 1;
@@ -174,10 +174,10 @@ int main(int argc, char **argv)
         if (running) {
             unsigned long sum = screen_sum();
             if (sum != last_sum) {
-                if (frame - last_change > frozen) {
-                    frozen = frame - last_change;
-                    frozen_at = last_change;
-                    strcpy(frozen_title, change_title);
+                if (frame - last_change > longest_unchanged) {
+                    longest_unchanged = frame - last_change;
+                    unchanged_at = last_change;
+                    strcpy(unchanged_title, change_title);
                 }
                 last_sum = sum;
                 last_change = frame;
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
                 noise_run = 0;
             }
         }
-        if (running && shots != NULL) {
+        if (running && screenshots != NULL) {
             /* A screen is saved when its title line changes, but only if
              * that title stayed put for a few frames (titles are written
              * a piece at a time). */
@@ -206,10 +206,10 @@ int main(int argc, char **argv)
                     if (profile != NULL) {
                         /* PROFILE.N: the cycles spent on screen N. */
                         char path[512];
-                        snprintf(path, sizeof(path), "%s.%02d", profile, nshot);
+                        snprintf(path, sizeof(path), "%s.%02d", profile, n_screenshots);
                         emu_profile_delta(path);
                     }
-                    save_shot(shots, nshot++, prev0);
+                    save_screenshot(screenshots, n_screenshots++, prev0);
                 }
                 strcpy(prev0, line0);
                 title_since = frame;
@@ -221,13 +221,13 @@ int main(int argc, char **argv)
             break;
         }
     }
-    if (shots != NULL && prev0[0] != '\0') {
+    if (screenshots != NULL && prev0[0] != '\0') {
         /* Let the last result sit on screen for a moment, then save it. */
         for (i = 0; i < 30; ++i) {
             emu_frame(0);
         }
         emu_snapshot();
-        save_shot(shots, nshot++, prev0);
+        save_screenshot(screenshots, n_screenshots++, prev0);
     }
 
     printf("Demo run on %s: %d frames (%.1f emulated seconds)\n", machine, frame,
@@ -262,10 +262,11 @@ int main(int argc, char **argv)
                BUDGET_MATCH, per > BUDGET_MATCH ? "  OVER BUDGET" : "");
         failures += per > BUDGET_MATCH;
     }
-    printf("  longest frozen screen %d frames (budget %d)%s\n    from frame %d on: %s\n",
-           frozen, BUDGET_FROZEN, frozen > BUDGET_FROZEN ? "  TOO LONG" : "", frozen_at,
-           frozen_title);
-    failures += frozen > BUDGET_FROZEN;
+    printf("  longest unchanged screen %d frames (budget %d)%s\n    from frame %d on: %s\n",
+           longest_unchanged, BUDGET_UNCHANGED,
+           longest_unchanged > BUDGET_UNCHANGED ? "  TOO LONG" : "", unchanged_at,
+           unchanged_title);
+    failures += longest_unchanged > BUDGET_UNCHANGED;
     printf("  longest click noise %d frames (budget %d)%s\n    on: %s\n", noise_longest,
            BUDGET_NOISE, noise_longest > BUDGET_NOISE ? "  TOO LONG" : "", noise_title);
     failures += noise_longest > BUDGET_NOISE;
@@ -307,8 +308,8 @@ int main(int argc, char **argv)
     if (profile != NULL) {
         emu_profile(profile);
     }
-    if (shots != NULL) {
-        printf("%d screenshots in %s\n", nshot, shots);
+    if (screenshots != NULL) {
+        printf("%d screenshots in %s\n", n_screenshots, screenshots);
     }
     printf("%s\n", failures ? "INTEGRATION TEST FAILED" : "integration test passed");
     emu_exit();

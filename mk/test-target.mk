@@ -9,7 +9,7 @@
 #   hw    screen, sound and sys against the real (emulated) hardware
 #
 # Each image boots from its own DOS 2.5 disk under libatari800. It writes
-# results into page six; tests/driver/target_runner.c reads them back,
+# results into page six ($0600); tests/driver/target_runner.c reads them back,
 # prints the 6502 timings and line coverage from the execution trace.
 
 TGT_DIR := $(BUILD_DIR)/target

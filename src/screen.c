@@ -224,17 +224,17 @@ static u8 block_avg(const u8 *pixels, u8 thumb_x, u8 thumb_y)
     return (u8)(sum / 9u);
 }
 
-void scr_thumb(u8 slot, const u8 *pixels)
+void scr_thumb(u8 position, const u8 *pixels)
 {
     u8 thumb_x;
     u8 thumb_y;
     u8 *dst;
 
-    if (slot >= 10u) {
+    if (position >= 10u) {
         return;
     }
     for (thumb_y = 0; thumb_y < 8u; ++thumb_y) {
-        dst = row_ptr((u8)(SCR_THUMB_Y + thumb_y)) + slot * 4u;
+        dst = row_ptr((u8)(SCR_THUMB_Y + thumb_y)) + position * 4u;
         for (thumb_x = 0; thumb_x < 8u; thumb_x += 2u) {
             *dst++ = (u8)((LUM_TO_NIBBLE(block_avg(pixels, thumb_x, thumb_y)) << 4) |
                           LUM_TO_NIBBLE(block_avg(pixels, (u8)(thumb_x + 1u), thumb_y)));
@@ -242,14 +242,14 @@ void scr_thumb(u8 slot, const u8 *pixels)
     }
 }
 
-void scr_mark(u8 slot, u8 on)
+void scr_mark(u8 position, u8 on)
 {
-    scr_fill((u8)(slot * 8u + 1u), SCR_MARK_Y, 6u, 1u, on ? 63u : 0u);
+    scr_fill((u8)(position * 8u + 1u), SCR_MARK_Y, 6u, 1u, on ? 63u : 0u);
 }
 
-void scr_bar(u8 slot, u8 height, u8 shade)
+void scr_bar(u8 position, u8 height, u8 shade)
 {
-    u8 x = (u8)(slot * 8u + 2u);
+    u8 x = (u8)(position * 8u + 2u);
 
     if (height > SCR_BAR_H) {
         height = SCR_BAR_H;

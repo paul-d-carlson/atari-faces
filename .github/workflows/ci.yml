@@ -109,7 +109,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: screenshots
-          path: build/integration/shots/
+          path: build/integration/screenshots/
           if-no-files-found: ignore
 
   release:
