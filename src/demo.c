@@ -417,6 +417,9 @@ static void train_covariance(void)
         scr_text(2, fmt_end());
         progress(ef_cov_done(), ef_cov_total());
         snd_click();
+        /* A click fades out over two frame waits. Cut short, it would
+         * hiss through the whole of the next dot product. */
+        sys_wait_frame();
         sys_wait_frame();
     } while (more == EF_MORE);
     scr_fill(SCR_PANEL_C, 0, 24u, 24u, 0u);

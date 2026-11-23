@@ -111,7 +111,8 @@ long each phase takes and which source lines ran. The integration test
 boots the real demo disk, taps START to skip the pauses, and checks that:
 every mystery face is recognized as the reference says; training takes
 under 60 s of math and a match under 3 s; the screen never stands still
-for more than 1.5 s; and the C stack stays within bounds. It also saves a
+for more than 1.5 s; no sound-effect click turns into static (noise for
+more than 3 frames); and the C stack stays within bounds. It also saves a
 screenshot of every screen to `build/integration/shots/`.
 
 For performance work, both runners take `--profile FILE`, and

@@ -20,6 +20,9 @@ extern monitor_coverage_rec_t MONITOR_coverage[0x10000];
 /* atari800's palette, 0xRRGGBB per color (colours.h). */
 extern int Colours_table[256];
 
+/* The last value the 6502 wrote to each AUDCx register (pokey.h). */
+extern unsigned char POKEY_AUDC[];
+
 #define SCREEN_W 384
 #define SCREEN_H 240
 
@@ -79,6 +82,11 @@ int emu_frame(int start)
 int emu_frames_run(void)
 {
     return g_frames;
+}
+
+unsigned emu_audc(unsigned voice)
+{
+    return POKEY_AUDC[voice & 3u];
 }
 
 /* ---- a tiny PNG writer (stored, uncompressed deflate blocks) ---------- */

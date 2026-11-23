@@ -3,7 +3,9 @@
  * AUTORUN.SYS users get), let it train and recognize every mystery face,
  * then check what it reported in page six (src/demo.h) against the numpy
  * reference and the speed budgets below (3 s per face, 60 s to train,
- * and the screen never frozen for more than 1.5 s).
+ * and the screen never frozen for more than 1.5 s). It also listens to
+ * the click voice: a click that is not faded out before the demo starts
+ * a long computation goes on hissing until the next frame wait.
  *
  *   demo_runner DEMO.atr DEMO.dbg [--machine OPT] [--profile FILE] [--shots DIR]
  *               [--realtime] [--cover src/x.c ...]
@@ -38,6 +40,11 @@
 #define BUDGET_MATCH     (3 * 60)    /* recognizing one face */
 #define BUDGET_TRAINING  (60 * 60)   /* everything from mean to weights */
 #define BUDGET_FROZEN    90          /* longest time the screen may not change */
+
+/* snd_click() (src/sound.c) plays noise on voice 1 that fades out within
+ * two frames. Anything longer is heard as static. */
+#define CLICK_VOICE      1u
+#define BUDGET_NOISE     3           /* frames */
 
 static const char *const g_phase_names[DEMO_PHASES] = {
     "load", "mean", "center", "covariance", "eigenvectors", "eigenfaces",
@@ -114,6 +121,9 @@ int main(int argc, char **argv)
     int frozen_at = 0;
     char frozen_title[SCR_COLS + 1] = "";
     char change_title[SCR_COLS + 1] = "";
+    char noise_title[SCR_COLS + 1] = "";
+    int noise_run = 0;
+    int noise_longest = 0;
     int frame;
     int running = 0;
     int failures = 0;
@@ -172,6 +182,18 @@ int main(int argc, char **argv)
                 last_sum = sum;
                 last_change = frame;
                 text_line(0, change_title);
+            }
+        }
+        if (running) {
+            /* Noise distortion has bit 5 clear; volume is the low nibble. */
+            unsigned audc = emu_audc(CLICK_VOICE);
+            if ((audc & 0x20u) == 0u && (audc & 0x0Fu) != 0u) {
+                if (++noise_run > noise_longest) {
+                    noise_longest = noise_run;
+                    text_line(0, noise_title);
+                }
+            } else {
+                noise_run = 0;
             }
         }
         if (running && shots != NULL) {
@@ -244,6 +266,9 @@ int main(int argc, char **argv)
            frozen, BUDGET_FROZEN, frozen > BUDGET_FROZEN ? "  TOO LONG" : "", frozen_at,
            frozen_title);
     failures += frozen > BUDGET_FROZEN;
+    printf("  longest click noise %d frames (budget %d)%s\n    on: %s\n", noise_longest,
+           BUDGET_NOISE, noise_longest > BUDGET_NOISE ? "  TOO LONG" : "", noise_title);
+    failures += noise_longest > BUDGET_NOISE;
     printf("  power iterations: %u\n", r->eigen_iters);
 
     {

@@ -27,7 +27,8 @@ First public release.
   emulated 6502 under libatari800 with line coverage; a reference suite
   that compares the integer math with a float PCA; an integration test
   that boots the real demo disk and checks every match, the timing
-  budgets and the C stack; and tests for the data exporter.
+  budgets, the sound effects and the C stack; and tests for the data
+  exporter.
 - GitHub Actions CI on Ubuntu 24.04: builds, runs every test suite,
   reports free memory, timings and coverage, and publishes a release
   archive for `v*` tags.

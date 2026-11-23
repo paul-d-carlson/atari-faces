@@ -18,6 +18,9 @@ unsigned emu_peek16(unsigned addr);
  * crashed. */
 int emu_frame(int start);
 int emu_frames_run(void);
+/* AUDC of POKEY voice 0..3: distortion in the top bits, volume in the low
+ * four. */
+unsigned emu_audc(unsigned voice);
 /* Save the current screen as a PNG. */
 int emu_screenshot(const char *path);
 /* Keep a copy of the current screen, and later save that copy. */

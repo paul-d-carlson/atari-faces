@@ -3,7 +3,10 @@
  *
  * Voice 0 plays tones (with a queue for little melodies), voice 1 plays
  * noise clicks. sys_wait_frame() calls snd_tick(), so effects keep
- * playing while the demo waits.
+ * playing while the demo waits. Nothing advances them while the demo
+ * computes, so a sound still playing when a long computation starts
+ * keeps sounding until the next wait: give a click its two frame waits
+ * first.
  */
 #ifndef SOUND_H
 #define SOUND_H
