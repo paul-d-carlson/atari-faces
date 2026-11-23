@@ -1,0 +1,43 @@
+atari-faces
+Copyright (c) 2026 paul-d-carlson
+
+This repository contains material under three different terms.
+
+1. The demo, build system, tools and tests (MIT)
+
+   Everything in this repository except data/FACES.DAT, the face pixels
+   in tests/fixtures/ef_reference.h, the screenshots in doc/ (which show
+   those faces) and third_party/ is released under the MIT License (see
+   LICENSE).
+
+2. Face images (Olivetti / AT&T face database)
+
+   data/FACES.DAT, tests/fixtures/ef_reference.h and the screenshots in
+   doc/ are derived from fifteen photographs in "The Database of Faces"
+   (formerly "The ORL Database of Faces"), AT&T Laboratories Cambridge,
+   obtained through scikit-learn's fetch_olivetti_faces. They are reduced
+   to 24 x 24 pixels with 64 grey levels by tools/export_faces.py. The
+   database's own terms apply to them, not the MIT License; its authors
+   ask that any use acknowledge AT&T Laboratories Cambridge.
+
+3. Atari DOS 2.5 (third_party/atari-dos25/)
+
+   DOS.SYS and DUP.SYS are Atari DOS 2.5, copyright Atari. They are NOT
+   covered by the MIT License, and are included only so that a bootable
+   disk image can be built and the tests can run. See
+   third_party/atari-dos25/README.md.
+
+Build-time dependencies (not distributed)
+
+   `make deps` downloads and builds the following into build/deps/. They
+   are linked only into local test programs and dir2atr, which are never
+   distributed with this project.
+
+   - atari800 5.2.0 (libatari800), GPL-2.0-or-later
+     https://github.com/atari800/atari800
+   - AtariSIO 221009 (dir2atr), GPL-2.0-or-later
+     https://www.horus.com/~hias/atari/
+
+   `make data` and `make test-tools` use numpy, pillow and scikit-learn
+   from tools/requirements.txt (BSD-style and HPND licences); nothing from
+   them is distributed.
