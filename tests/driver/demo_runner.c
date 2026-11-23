@@ -1,6 +1,6 @@
 /*
  * demo_runner.c -- integration test: boot the real demo disk (the exact
- * AUTORUN.SYS users get), let it train and recognise every mystery face,
+ * AUTORUN.SYS users get), let it train and recognize every mystery face,
  * then check what it reported in page six (src/demo.h) against the numpy
  * reference and the speed budgets below (3 s per face, 60 s to train,
  * and the screen never frozen for more than 1.5 s).
@@ -33,14 +33,14 @@
 #define STACK_LIMIT  (STACK_SIZE * 3u / 4u)
 
 /* Speed budgets, in frames (60 a second). The demo times only the
- * eigenfaces maths (see src/demo.h); BUDGET_FROZEN covers everything
+ * eigenfaces math (see src/demo.h); BUDGET_FROZEN covers everything
  * else, so the show itself never stalls. */
-#define BUDGET_MATCH     (3 * 60)    /* recognising one face */
+#define BUDGET_MATCH     (3 * 60)    /* recognizing one face */
 #define BUDGET_TRAINING  (60 * 60)   /* everything from mean to weights */
 #define BUDGET_FROZEN    90          /* longest time the screen may not change */
 
 static const char *const g_phase_names[DEMO_PHASES] = {
-    "load", "mean", "centre", "covariance", "eigenvectors", "eigenfaces",
+    "load", "mean", "center", "covariance", "eigenvectors", "eigenfaces",
     "weights", "match",
 };
 
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    printf("Time spent on the maths (drawing and pauses not counted):\n");
+    printf("Time spent on the math (drawing and pauses not counted):\n");
     for (p = 0; p < DEMO_PHASES; ++p) {
         unsigned f = r->frames[2 * p] | r->frames[2 * p + 1] << 8;
         if (p >= DEMO_PH_MEAN && p <= DEMO_PH_WEIGHTS) {

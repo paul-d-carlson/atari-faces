@@ -96,7 +96,7 @@ static void test_mean_matches(void)
     while (ef_center_step() == EF_MORE) {
     }
     TF_EQ(ef_stage(), EF_ST_CENTERED);
-    tf_bench("mean+centre", (u16)(t_ticks() - t));
+    tf_bench("mean+center", (u16)(t_ticks() - t));
     for (p = 0; p < EF_PIXELS; ++p) {
         TF_EQ(ef_mean()[p], ref_mean[p]);
     }
@@ -186,7 +186,7 @@ static void test_queries_match_reference(void)
         /* Same best match as the float answer, and the right person. */
         TF_EQ(ef_rank_index(0), ref_rankings[q * N]);
         TF_EQ(ef_label(ef_rank_index(0)), ref_query_labels[q]);
-        /* Every distance within 3% (plus 3/4 of a grey level, for the
+        /* Every distance within 3% (plus 3/4 of a gray level, for the
          * shortest ones) of the float answer. */
         for (i = 0; i < N; ++i) {
             d = ef_distance(i);

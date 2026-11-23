@@ -1,5 +1,5 @@
 /*
- * demo.h -- the eigenfaces show: load, train step by step, then recognise
+ * demo.h -- the eigenfaces show: load, train step by step, then recognize
  * each mystery face in turn, forever.
  *
  * Progress and results are also written to a small report block in page
@@ -15,7 +15,7 @@
 #define DEMO_REPORT_ADDR 0x0600u
 #define DEMO_MAGIC       0xD5u
 
-/* Phases timed in demo_report.frames: the eigenfaces maths only (the
+/* Phases timed in demo_report.frames: the eigenfaces math only (the
  * ef_* calls), not the drawing around it or the pauses for the viewer.
  * Loading is the exception: it counts the disk reads. */
 #define DEMO_PH_LOAD      0u
@@ -40,7 +40,7 @@ typedef struct {
     u8 best_index;     /* closest training face */
     u8 best_label;
     u8 confidence;     /* 0..100 */
-    u8 dist_lo;        /* distance to the best match, 1/4 grey levels */
+    u8 dist_lo;        /* distance to the best match, 1/4 gray levels */
     u8 dist_hi;
 } demo_query_report;
 
@@ -51,7 +51,7 @@ typedef struct {
     u8 n_query;
     u8 k;
     u8 trained;        /* 1 once training has finished */
-    u8 queries_done;   /* counts up for ever; the first n_query are kept */
+    u8 queries_done;   /* counts up forever; the first n_query are kept */
     u8 eigen_iters;    /* power iterations over all components */
     u8 frames[DEMO_PHASES * 2u];  /* little-endian frame counts */
     demo_query_report q[EFD_MAX_QUERY];
@@ -68,7 +68,7 @@ demo_report *demo_report_block(void);
 u8 demo_load(void);
 void demo_title(void);
 void demo_train(void);
-/* Recognise query q. */
+/* Recognize query q. */
 void demo_match(u8 q);
 /* Show an error on screen and record it in the report block. */
 void demo_fail(u8 error, u8 detail);

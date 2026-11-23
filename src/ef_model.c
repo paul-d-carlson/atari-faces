@@ -13,7 +13,7 @@
  * distance between their weight vectors.
  *
  * Value ranges (why nothing overflows on a 16-bit int / 32-bit long):
- *   centred pixel          |c| <= 63
+ *   centered pixel         |c| <= 63
  *   covariance entry       |C| <= 576 * 63 * 63      = 2,286,144   (s32),
  *                          kept only as C16 = C >> shift, |C16| <= 16383
  *   sample vector          |v| <= 255 (power iteration), a copy scaled
@@ -35,9 +35,9 @@ static u8  g_n;             /* training faces */
 static u8  g_k;             /* eigenfaces to find */
 static u8  g_label[EF_MAX_FACES];
 
-/* Raw pixels, then centred pixels once ef_center_step() reaches them. */
+/* Raw pixels, then centered pixels once ef_center_step() reaches them. */
 static s8  g_face[EF_MAX_FACES][EF_PIXELS];
-static u8  g_centered;      /* faces centred so far */
+static u8  g_centered;      /* faces centered so far */
 static u8  g_mean[EF_PIXELS];
 
 /* The diagonal of C exactly, and all of C as C >> g_cov_shift. */
@@ -74,9 +74,9 @@ static u8  g_ef_row;
 static s16 g_weight[EF_MAX_FACES][EF_MAX_K];
 static u8  g_weights_done;
 
-/* The face being recognised. */
+/* The face being recognized. */
 static const u8 *g_query;                   /* caller's pixels, 0..63 */
-static s8  g_qrow[EF_W];                    /* one centred row of it */
+static s8  g_qrow[EF_W];                    /* one centered row of it */
 static s16 g_qweight[EF_MAX_K];
 static u8  g_query_state;    /* 0 none, 1 set, 2 projected, 3 ranked */
 static s32 g_dist2[EF_MAX_FACES];           /* squared distance to each face */
@@ -475,7 +475,7 @@ static void seed_vector(void)
 {
     u8 i;
 
-    /* Any vector works except multiples of (1,1,...,1): the centred faces
+    /* Any vector works except multiples of (1,1,...,1): the centered faces
      * sum to zero, so that vector is in the null space of C. */
     for (i = 0; i < g_n; ++i) {
         g_v[i] = (s16)(EF_VEC_SCALE - (s16)i * 47);
@@ -684,7 +684,7 @@ u16 ef_eigenface_norm(u8 c)
 
 /* ---- weights ------------------------------------------------------- */
 
-static void project(const s8 *centred, s16 *out)
+static void project(const s8 *centered, s16 *out)
 {
     u8 c;
     s32 d;
@@ -694,7 +694,7 @@ static void project(const s8 *centred, s16 *out)
             out[c] = 0;
             continue;
         }
-        d = ef_dot_s8(g_eigface[c], centred, EF_PIXELS);
+        d = ef_dot_s8(g_eigface[c], centered, EF_PIXELS);
         out[c] = (s16)div_round(d * EF_WEIGHT_UNIT, (s32)g_eigface_norm[c]);
     }
 }
@@ -737,7 +737,7 @@ u8 ef_query_set(const u8 *pixels)
     return EF_DONE;
 }
 
-/* The query is centred one row at a time, so it needs no 576-byte copy. */
+/* The query is centered one row at a time, so it needs no 576-byte copy. */
 u8 ef_query_project(void)
 {
     s32 d[EF_MAX_K];
@@ -863,7 +863,7 @@ u8 ef_reconstruct_rows(const s16 *weights, u8 upto, u8 first_row, u8 rows, u8 *o
     if (rows > EF_H - first_row) {
         rows = (u8)(EF_H - first_row);
     }
-    /* Eigenface c adds w/4 * e/|e| grey levels. Work in 1/16 grey levels
+    /* Eigenface c adds w/4 * e/|e| gray levels. Work in 1/16 gray levels
      * with |f| <= 63, so each pixel is one small strided dot product. */
     for (c = 0; c < upto; ++c) {
         f = 0;

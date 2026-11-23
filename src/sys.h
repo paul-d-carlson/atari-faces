@@ -12,7 +12,7 @@
 /* Frames since power-on (low 16 bits of RTCLOK). */
 u16 sys_ticks(void);
 /* Wait for the next vertical blank; also runs the sound envelopes and
- * stops the OS colour-cycling screen saver. */
+ * stops the OS color-cycling screen saver. */
 void sys_wait_frame(void);
 u8 sys_start_held(void);
 /* Wait `frames` frames or until START is pressed (then released).

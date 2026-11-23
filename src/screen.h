@@ -1,5 +1,5 @@
 /*
- * screen.h -- 80x40 sixteen-grey picture above four lines of text.
+ * screen.h -- 80x40 sixteen-gray picture above four lines of text.
  *
  * The top of the screen is GTIA mode 9 (Graphics 9: 80 pixels across, 16
  * shades of one hue), each picture row shown on four scan lines so pixels
@@ -66,7 +66,7 @@ void scr_fill(u8 x, u8 y, u8 w, u8 h, u8 lum);
 /* First `rows` rows of a 24x24 face (0..63) at even x. */
 void scr_face_rows(u8 x, u8 y, const u8 *px, u8 rows);
 void scr_face(u8 x, u8 y, const u8 *px);
-/* A signed 24x24 image: 0 is mid-grey, and values are multiplied by
+/* A signed 24x24 image: 0 is mid-gray, and values are multiplied by
  * `contrast` (1, 2, ...) before -64..63 is mapped to black..white. */
 void scr_face_signed(u8 x, u8 y, const s8 *v, u8 contrast);
 /* 8x8 thumbnail (3x3 averages) of a face in slot 0..9. */

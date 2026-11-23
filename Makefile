@@ -14,7 +14,7 @@ include mk/deps.mk
 # ---------------------------------------------------------------------------
 # Sources
 # ---------------------------------------------------------------------------
-# Portable maths and data code: no Atari headers, also built natively.
+# Portable math and data code: no Atari headers, also built natively.
 CORE_SRCS := \
 	src/ef_kernel.c \
 	src/ef_model.c \

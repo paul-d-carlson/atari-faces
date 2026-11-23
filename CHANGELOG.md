@@ -14,7 +14,7 @@ First public release.
   C89 for cc65: it trains on ten faces from the Olivetti database,
   showing the mean face, the covariance matrix, the eigenvectors (by
   power iteration) and the eigenfaces on a GTIA mode 9 screen, then
-  recognises five faces it has never seen.
+  recognizes five faces it has never seen.
 - A single make-based build: `make` for `faces.xex`, `make atr` for a
   bootable DOS 2.5 disk, `make deps` to fetch the pinned, checksummed
   third-party tools, and `make data` to regenerate the face data and its
@@ -25,7 +25,7 @@ First public release.
 - Unit tests that run both natively, with AddressSanitizer,
   UndefinedBehaviorSanitizer and 16-bit overflow checks, and on the
   emulated 6502 under libatari800 with line coverage; a reference suite
-  that compares the integer maths with a float PCA; an integration test
+  that compares the integer math with a float PCA; an integration test
   that boots the real demo disk and checks every match, the timing
   budgets and the C stack; and tests for the data exporter.
 - GitHub Actions CI on Ubuntu 24.04: builds, runs every test suite,

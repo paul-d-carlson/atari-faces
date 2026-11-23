@@ -1,5 +1,5 @@
 /*
- * ef_kernel.h -- the inner loops of the eigenfaces maths.
+ * ef_kernel.h -- the inner loops of the eigenfaces math.
  *
  * Nearly all of the run time is spent in these dot products of signed
  * bytes: two 576-pixel images, or the same pixel of every training face.
@@ -10,7 +10,7 @@
  * (exact for integers), which on the 6502 is two table look-ups instead
  * of a call to cc65's general 16 x 16 multiply. With every input in
  * -63..63, a + b and a - b fit a signed byte, so the byte itself indexes
- * the table: no absolute values, no sign tests. Centred pixels are
+ * the table: no absolute values, no sign tests. Centered pixels are
  * already in that range; eigenfaces and weights are scaled to it.
  */
 #ifndef EF_KERNEL_H

@@ -216,7 +216,7 @@ static const unsigned char ref_rankings[50] = {
     7, 6,
 };
 
-/* Distance from each query to each training face, in 1/4 grey levels
+/* Distance from each query to each training face, in 1/4 gray levels
  * (the unit of ef_distance()). */
 static const long ref_dist_x4[50] = {
     156, 416, 773, 874, 815, 1318, 1460, 1511, 926, 897, 699, 781, 107, 175, 744, 931,

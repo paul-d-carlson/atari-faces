@@ -17,7 +17,7 @@ typedef struct {
 } monitor_coverage_rec_t;
 extern monitor_coverage_rec_t MONITOR_coverage[0x10000];
 
-/* atari800's palette, 0xRRGGBB per colour (colours.h). */
+/* atari800's palette, 0xRRGGBB per color (colours.h). */
 extern int Colours_table[256];
 
 #define SCREEN_W 384

@@ -4,7 +4,7 @@
 
 Face recognition with principal component analysis ("eigenfaces"), running
 on a 48K Atari 800 with a 1.79 MHz 6502. The demo trains on ten faces from
-the Olivetti (AT&T) face database, showing every step of the maths as it
+the Olivetti (AT&T) face database, showing every step of the math as it
 happens, then picks out five faces it has never seen.
 
 ![Matching a face](doc/match.png)
@@ -30,7 +30,7 @@ every CI run as the `atari-faces` artifact.
 
 On real hardware, boot `build/faces.atr` with BASIC turned off (hold OPTION
 on an XL/XE). START skips a pause; the demo loops over the five mystery
-faces for ever.
+faces forever.
 
 Requirements: cc65 2.18 or later, `make`, a host C/C++ compiler, `curl`
 and `tar`. Python with numpy, pillow and scikit-learn is needed only to
@@ -38,9 +38,9 @@ regenerate the data (`make data`).
 
 ## What the demo shows
 
-| Step | Screen | Maths |
+| Step | Screen | Math |
 |------|--------|-------|
-| 1 | Loading the faces | ten 24 x 24 faces, 64 grey levels, from `D:FACES.DAT` |
+| 1 | Loading the faces | ten 24 x 24 faces, 64 gray levels, from `D:FACES.DAT` |
 | 2 | The average face | mean of the training faces |
 | 3 | What makes a face unique | each face minus the mean |
 | 4 | How alike are the faces? | the 10 x 10 covariance matrix, entry by entry |
@@ -60,7 +60,7 @@ The screen is GTIA mode 9 (80 x 40 pixels, 16 shades) above four lines of
   signed byte in -63..63. Every product of two of those fits a 16-bit
   `int`, which is what cc65 does quickly.
 - **The small matrix.** Instead of the 576 x 576 pixel covariance, the
-  model diagonalises the 10 x 10 matrix of dot products between faces
+  model diagonalizes the 10 x 10 matrix of dot products between faces
   (Turk & Pentland's trick); see the comment at the top of
   [src/ef_model.c](src/ef_model.c).
 - **One fast inner loop.** Almost all the time goes into dot products of
@@ -74,8 +74,8 @@ Measured on the emulated 6502 (`make test-integration`):
 
 | | Time |
 |---|---|
-| Training maths (mean to weights) | about 53 s |
-| Recognising one face | about 1.3 s |
+| Training math (mean to weights) | about 53 s |
+| Recognizing one face | about 1.3 s |
 | RAM free (code + data + 512-byte stack, BASIC off) | about 200 bytes |
 
 ## Tests
@@ -109,8 +109,8 @@ On the 6502 the tests run under libatari800, booted from a real DOS 2.5
 disk, and report through page six (`$0600`); the runner also prints how
 long each phase takes and which source lines ran. The integration test
 boots the real demo disk, taps START to skip the pauses, and checks that:
-every mystery face is recognised as the reference says; training takes
-under 60 s of maths and a match under 3 s; the screen never stands still
+every mystery face is recognized as the reference says; training takes
+under 60 s of math and a match under 3 s; the screen never stands still
 for more than 1.5 s; and the C stack stays within bounds. It also saves a
 screenshot of every screen to `build/integration/shots/`.
 
@@ -124,7 +124,7 @@ function.
 (`make data`), which also documents the format: ten training faces (two
 photos each of five people) and five query faces (a third photo of each).
 Photo 71, subject 7, is the query used in the article. The other subjects
-were chosen as the set where every query is recognised with the widest
+were chosen as the set where every query is recognized with the widest
 margin using four eigenfaces.
 
 ## Layout
@@ -148,7 +148,7 @@ mk/             make fragments
 third_party/    Atari DOS 2.5 (see its README)
 ```
 
-The maths (`ef_*`, `fmt`) has no Atari dependencies; only `screen`,
+The math (`ef_*`, `fmt`) has no Atari dependencies; only `screen`,
 `sound`, `sys`, `disk` and `demo` would change for another 6502 machine.
 
 ## Credits

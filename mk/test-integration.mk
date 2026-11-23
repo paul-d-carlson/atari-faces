@@ -2,7 +2,7 @@
 #
 # tests/driver/demo_runner.c boots build/faces.atr (the exact disk users
 # get) on an emulated 48K Atari 800, taps START to skip the pauses, and
-# checks the page-six report: every mystery face recognised as the numpy
+# checks the page-six report: every mystery face recognized as the numpy
 # reference says, each phase within its frame budget. It also saves a
 # screenshot of every screen and the 6502 line coverage of the whole demo.
 

@@ -13,7 +13,7 @@ size or make it smaller, and say in your pull request how the size
 changed.
 
 Speed matters too: the integration test fails if training takes more than
-60 s of maths, a match more than 3 s, or the screen stands still for more
+60 s of math, a match more than 3 s, or the screen stands still for more
 than 1.5 s.
 
 ## Workflow
@@ -33,7 +33,7 @@ than 1.5 s.
    same tests on every pull request and shows these figures in the run
    summary.
 
-3. Add or update tests for any behaviour you change:
+3. Add or update tests for any behavior you change:
    - a unit test in the matching `tests/unit/test_<module>.c`. These run
      natively (`make test-host`, with sanitizers, in under a second) and
      on the 6502 (`make test-target`); a new suite also needs an entry in

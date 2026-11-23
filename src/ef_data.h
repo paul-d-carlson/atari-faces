@@ -5,7 +5,7 @@
  *   2  1         version
  *   3  n_train   1..EF_MAX_FACES
  *   4  n_query   0..EFD_MAX_QUERY
- *   5  24 24 64  width, height, grey levels
+ *   5  24 24 64  width, height, gray levels
  *   8  {label, shot} per training face, then per query face
  *   .. n_train * 576 pixel bytes, then n_query * 576, values 0..63
  *

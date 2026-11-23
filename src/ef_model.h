@@ -7,9 +7,9 @@
  * eigenfaces, project every face onto them and rank the training faces by
  * Euclidean distance between weight vectors.
  *
- * Everything is integer maths sized for a 6502: pixels are 0..63, centred
+ * Everything is integer math sized for a 6502: pixels are 0..63, centered
  * pixels -63..63, eigenfaces are -63..63 with their length kept on the
- * side, and weights are in 1/4 grey-level units.
+ * side, and weights are in 1/4 gray-level units.
  *
  * Training is split into small steps so the caller can redraw the screen
  * between them:
@@ -40,7 +40,7 @@
 
 /* Sample-space eigenvectors are scaled so their largest entry is +-255. */
 #define EF_VEC_SCALE    255
-/* Weights and distances are in units of 1/EF_WEIGHT_UNIT grey level. */
+/* Weights and distances are in units of 1/EF_WEIGHT_UNIT gray level. */
 #define EF_WEIGHT_UNIT  4
 /* Eigenfaces are stored with this root-mean-square pixel value. */
 #define EF_EF_RMS       12u
@@ -92,7 +92,7 @@ u8 ef_mean_of_first(u8 j, u8 first_row, u8 rows, u8 *out);
 u8 ef_center_step(void);
 u8 ef_center_done(void);
 /* Face i as stored: raw 0..63 pixels until ef_center_step() has reached
- * it, centred -63..63 pixels afterwards. */
+ * it, centered -63..63 pixels afterwards. */
 const s8 *ef_centered(u8 i);
 /* Rebuild the original 0..63 pixels of training face i. */
 void ef_face_pixels(u8 i, u8 *out);
@@ -122,7 +122,7 @@ u8 ef_eigen_iterations_used(u8 c);
 /* Share of the total variance explained by component c, in 1/1000. */
 u16 ef_variance_permille(u8 c);
 
-/* Eigenface c = sum_i v_c[i] * centred face i, one image row per call. */
+/* Eigenface c = sum_i v_c[i] * centered face i, one image row per call. */
 u8 ef_eigenface_step(void);
 u8 ef_eigenface_component(void);
 u8 ef_eigenface_row(void);
@@ -148,7 +148,7 @@ s16 ef_query_weight(u8 c);
 /* Sort training faces by distance to the query. */
 u8 ef_rank(void);
 u8 ef_rank_index(u8 r);
-/* Euclidean distance from the query to training face i (1/4 grey levels). */
+/* Euclidean distance from the query to training face i (1/4 gray levels). */
 u16 ef_distance(u8 i);
 /* 0..100: how much closer the best match is than the closest face of a
  * different label. 100 when every training face has the same label. */

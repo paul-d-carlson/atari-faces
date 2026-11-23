@@ -16,7 +16,7 @@ This repository contains material under three different terms.
    doc/ are derived from fifteen photographs in "The Database of Faces"
    (formerly "The ORL Database of Faces"), AT&T Laboratories Cambridge,
    obtained through scikit-learn's fetch_olivetti_faces. They are reduced
-   to 24 x 24 pixels with 64 grey levels by tools/export_faces.py. The
+   to 24 x 24 pixels with 64 gray levels by tools/export_faces.py. The
    database's own terms apply to them, not the MIT License; its authors
    ask that any use acknowledge AT&T Laboratories Cambridge.
 
@@ -39,5 +39,5 @@ Build-time dependencies (not distributed)
      https://www.horus.com/~hias/atari/
 
    `make data` and `make test-tools` use numpy, pillow and scikit-learn
-   from tools/requirements.txt (BSD-style and HPND licences); nothing from
+   from tools/requirements.txt (BSD-style and HPND licenses); nothing from
    them is distributed.

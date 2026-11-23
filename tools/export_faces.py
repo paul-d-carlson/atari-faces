@@ -6,13 +6,13 @@ The demo follows the method in "Face Recognition using Eigenfaces (Python)"
 by Hassan Id Mansour: subtract the mean face, take the principal components
 of the training faces, project every face onto them and rank the training
 faces by Euclidean distance in that weight space. The Atari version shrinks
-the Olivetti faces to 24x24 pixels with 64 grey levels (0..63) so that every
+the Olivetti faces to 24x24 pixels with 64 gray levels (0..63) so that every
 pixel product fits a 16-bit int.
 
 Outputs
   data/FACES.DAT                 the only data file the Atari loads
   tests/fixtures/ef_reference.h  what a float PCA computes for the same
-                                 quantised pixels; the C unit tests compare
+                                 quantized pixels; the C unit tests compare
                                  the integer implementation against it
 
 FACES.DAT layout (all values unsigned bytes)
@@ -21,7 +21,7 @@ FACES.DAT layout (all values unsigned bytes)
   3  n_train      training faces (<= 10)
   4  n_query      query faces (<= 5)
   5  24 24        width, height
-  7  64           grey levels per pixel
+  7  64           gray levels per pixel
   8  {label, shot} for every training face, then every query face
      (label = Olivetti subject 0..39, shot = photo 0..9 of that subject)
   .. n_train * 576 pixel bytes, then n_query * 576, row-major, 0..63
@@ -49,7 +49,7 @@ HEADER_LEN = 8
 # Five subjects, two training photos each, plus a third photo of each subject
 # as a query. Subject 7 / photo 71 is the query used in the article; the other
 # subjects were chosen by searching Olivetti for the set where every query is
-# recognised with the widest margin at K=4 (see README "Choosing the faces").
+# recognized with the widest margin at K=4 (see README, "Data").
 DEFAULT_TRAIN = [70, 72, 106, 107, 159, 150, 214, 211, 260, 267]
 DEFAULT_QUERY = [71, 104, 152, 215, 266]
 DEFAULT_K = 4
@@ -66,7 +66,7 @@ def shrink(img64: np.ndarray) -> np.ndarray:
 
 def pack_dat(train: Sequence[Tuple[int, int, np.ndarray]],
              query: Sequence[Tuple[int, int, np.ndarray]]) -> bytes:
-    """Serialise (label, shot, pixels) tuples into the FACES.DAT format."""
+    """Serialize (label, shot, pixels) tuples into the FACES.DAT format."""
     if not 1 <= len(train) <= MAX_TRAIN:
         raise ValueError(f"need 1..{MAX_TRAIN} training faces")
     if len(query) > MAX_QUERY:
@@ -181,7 +181,7 @@ def write_reference_header(path: str, train, query, k: int, ref: dict) -> None:
         c_array("ref_eigenfaces", "signed char", eig_s8),
         "/* Training indices sorted by distance, one row per query. */",
         c_array("ref_rankings", "unsigned char", [i for r in ref["rankings"] for i in r]),
-        "/* Distance from each query to each training face, in 1/4 grey levels",
+        "/* Distance from each query to each training face, in 1/4 gray levels",
         " * (the unit of ef_distance()). */",
         c_array("ref_dist_x4", "long", dist_x4),
         "#endif",
@@ -201,7 +201,7 @@ def main(argv=None) -> int:
     p.add_argument("--train", default=",".join(map(str, DEFAULT_TRAIN)),
                    help="comma-separated Olivetti image indices for training")
     p.add_argument("--query", default=",".join(map(str, DEFAULT_QUERY)),
-                   help="comma-separated Olivetti image indices to recognise")
+                   help="comma-separated Olivetti image indices to recognize")
     p.add_argument("-k", type=int, default=DEFAULT_K, help="eigenfaces kept")
     p.add_argument("--dat", default=os.path.join(root, "data", "FACES.DAT"))
     p.add_argument("--header", default=os.path.join(root, "tests", "fixtures", "ef_reference.h"))

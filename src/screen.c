@@ -175,7 +175,7 @@ void scr_face(u8 x, u8 y, const u8 *px)
     scr_face_rows(x, y, px, 24u);
 }
 
-/* Brightness nibble for a signed value: 0 is mid-grey, +-64/contrast
+/* Brightness nibble for a signed value: 0 is mid-gray, +-64/contrast
  * is white/black. */
 static u8 signed_nibble(s8 v, u8 contrast)
 {

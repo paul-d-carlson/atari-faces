@@ -190,7 +190,7 @@ static void test_center_and_restore(void)
     ef_face_pixels(0, g_px);            /* before centring: raw copy */
     TF_EQ(g_px[0], 52);
     ef_compute_mean();
-    TF_EQ(ef_center_step(), EF_MORE);   /* face 0 centred, the rest not */
+    TF_EQ(ef_center_step(), EF_MORE);   /* face 0 centered, the rest not */
     TF_EQ(ef_center_done(), 1);
     TF_EQ(ef_centered(0)[0], 20);
     TF_EQ(ef_centered(1)[0], 12);       /* still the raw pixel */
@@ -342,7 +342,7 @@ static void test_weights(void)
     }
     TF_EQ(ef_stage(), EF_ST_TRAINED);
     TF_EQ(ef_weights_step(), EF_ERR);
-    /* |20 A| = 20 * 24 = 480 grey levels, in quarter units = 1920. */
+    /* |20 A| = 20 * 24 = 480 gray levels, in quarter units = 1920. */
     TF_NEAR(abs_s32(ef_weight(0, 0)), 1920, 4);
     TF_EQ(ef_weight(1, 0), -ef_weight(0, 0));
     TF_NEAR(ef_weight(0, 1), 0, 1);

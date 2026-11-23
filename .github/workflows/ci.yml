@@ -82,7 +82,7 @@ jobs:
             echo "### Tests"
             grep -h 'tests passed' host.log target.log 2>/dev/null | sed 's/^/- /' || true
             if [ -f integration.log ]; then
-              echo "- mystery faces recognised: $(grep -c '\[PASS\] mystery face' integration.log || true) of 5"
+              echo "- mystery faces recognized: $(grep -c '\[PASS\] mystery face' integration.log || true) of 5"
             fi
             if [ -f coverage.log ]; then
               grep -h '^TOTAL' coverage.log | awk '{ print "- host line coverage: " $(NF-3) }' || true
@@ -91,7 +91,7 @@ jobs:
               echo
               echo "### Timing (emulated 6502)"
               echo '```'
-              sed -n '/^Time spent on the maths/,/power iterations/p' integration.log
+              sed -n '/^Time spent on the math/,/power iterations/p' integration.log
               echo '```'
             fi
           } >> "$GITHUB_STEP_SUMMARY"

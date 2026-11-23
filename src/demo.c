@@ -1,7 +1,7 @@
 /*
  * demo.c -- see demo.h.
  *
- * Screen layout (80 x 40 grey pixels, then 4 text lines):
+ * Screen layout (80 x 40 gray pixels, then 4 text lines):
  *
  *   rows  0-23  three 24x24 panels: A (x=2), B (x=28), C (x=54)
  *   rows 25-32  the ten training faces as 8x8 thumbnails
@@ -332,7 +332,7 @@ static void train_center(void)
     u8 i;
 
     step_title(3, "WHAT MAKES A FACE UNIQUE");
-    scr_text(1, "FACE - MEAN  (GREY = SAME AS AVERAGE)");
+    scr_text(1, "FACE - MEAN  (GRAY = SAME AS AVERAGE)");
     clear_marks();
     for (i = 0; i < g_info.n_train; ++i) {
         clock_start();
@@ -455,7 +455,7 @@ static void train_eigen(void)
     demo_report *r = demo_report_block();
 
     step_title(5, "MAIN AXES OF VARIATION");
-    scr_text(1, "POWER METHOD: MULTIPLY, NORMALISE, AGAIN");
+    scr_text(1, "POWER METHOD: MULTIPLY, NORMALIZE, AGAIN");
     scr_hue(HUE_EIGEN);
     do {
         comp = ef_eigen_component();
@@ -593,7 +593,7 @@ void demo_train(void)
     scr_text(0, "");
     scr_text_at(0, 0, " TRAINED ", SCR_INVERSE);
     fmt_begin();
-    fmt_str("MATHS TOOK ");
+    fmt_str("MATH TOOK ");
     fmt_seconds(g_train_frames);
     fmt_str(" ON A 6502");
     scr_text_at(0, 10, fmt_end(), 0);
