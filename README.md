@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/paul-d-carlson/atari-faces/actions/workflows/ci.yml/badge.svg)](https://github.com/paul-d-carlson/atari-faces/actions/workflows/ci.yml)
 
-Face recognition with principal component analysis ("eigenfaces"), running
+Facial recognition with principal component analysis ("eigenfaces"), running
 on a 48K Atari 800 with a 1.79 MHz 6502. The demo trains on ten faces from
 the Olivetti (AT&T) face database, showing every step of the math as it
 happens, then picks out five faces it has never seen.
